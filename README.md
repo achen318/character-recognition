@@ -1,2 +1,3 @@
 # linear-ocr
-EMNIST + linear algebra + optical character recognition
+
+MNIST + linear algebra + optical character recognition
