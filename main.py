@@ -1,13 +1,16 @@
-import numpy as np
-import random
-from mnist import MNIST
+from tensorflow.keras.datasets import mnist
+from tensorflow.keras.utils import to_categorical
+from matplotlib import pyplot as plt
 
-mndata = MNIST("data")
+# Load the dataset
+(trainX, trainY), (testX, testY) = mnist.load_data()
 
-images, labels = mndata.load_training()
-# images, labels = mndata.load_testing()
+trainX = trainX.reshape((trainX.shape[0], 28, 28, 1))
+testX = testX.reshape((testX.shape[0], 28, 28, 1))
 
-X = np.array(random.choice(images)).reshape(28, 28)
-# P, D, Q = np.linalg.svd(X, full_matrices=False)
+trainY = to_categorical(trainY)
+testY = to_categorical(testY)
 
-print(X.view())
+print(trainX)
+
+# https://machinelearningmastery.com/how-to-develop-a-convolutional-neural-network-from-scratch-for-mnist-handwritten-digit-classification/
