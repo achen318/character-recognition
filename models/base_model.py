@@ -1,9 +1,11 @@
+import json
 from typing import Tuple
 
 
 class BaseModel:
-    def __init__(self):
+    def __init__(self, model_file):
         self.model = {}
+        self.model_file = model_file
 
     def train(self, trainX, trainY) -> None: ...
 
@@ -14,7 +16,7 @@ class BaseModel:
         total = 0
 
         for mat, char in zip(testX, testY):
-            if self.predict(mat) == str(char):
+            if self.predict(mat) == char:
                 correct += 1
 
             total += 1
