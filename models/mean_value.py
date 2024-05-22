@@ -23,7 +23,7 @@ class MeanValue(BaseModel):
                 self.model[char] += mat.mean() / len(trainX)
 
             # Save the model
-            with open(self.model_file, "w") as f:
+            with open(self.model_file, "wb") as f:
                 pickle.dump(self.model, f)
 
     def predict(self, mat) -> str:

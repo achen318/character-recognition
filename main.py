@@ -1,9 +1,9 @@
 from tensorflow.keras.datasets import mnist
 
-from models.mean_matrix import MeanMatrix
-from models.mean_value import MeanValue
+from models.mean_matrix import MeanMatrix # 69.68% accurate
+from models.mean_value  import MeanValue  # 9.8% accurate
 
-model = MeanMatrix()
+model = MeanValue()
 
 # Load the dataset
 (trainX, trainY), (testX, testY) = mnist.load_data()
