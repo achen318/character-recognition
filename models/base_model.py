@@ -14,8 +14,8 @@ class BaseModel:
         correct = 0
         total = 0
 
-        for mat, char in zip(testX, testY):
-            if self.predict(mat) == char:
+        for mat, label in zip(testX, testY):
+            if self.predict(mat) == label:
                 correct += 1
 
             total += 1

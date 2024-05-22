@@ -15,27 +15,27 @@ class MeanMatrix(BaseModel):
 
         except FileNotFoundError:
             # Train the model
-            for mat, char in zip(trainX, trainY):
-                if char not in self.model:
-                    self.model[char] = np.zeros(mat.shape)
+            for mat, label in zip(trainX, trainY):
+                if label not in self.model:
+                    self.model[label] = np.zeros(mat.shape)
 
                 # Accumulate the mean of matrices
-                self.model[char] += mat / len(trainX)
+                self.model[label] += mat / len(trainX)
 
             # Save the model
             with open(self.model_file, "wb") as f:
                 pickle.dump(self.model, f)
 
     def predict(self, mat) -> str:
-        closest_char = ""
+        closest_label = ""
         closest_dist = np.inf
 
-        for char, char_mean in self.model.items():
+        for label, label_mean in self.model.items():
             # Minimize the Frobenius norm of the difference in matrices
-            dist = np.linalg.norm(mat - char_mean)
+            dist = np.linalg.norm(mat - label_mean)
 
             if dist < closest_dist:
                 closest_dist = dist
-                closest_char = char
+                closest_label = label
 
-        return closest_char
+        return closest_label

@@ -15,27 +15,27 @@ class MeanValue(BaseModel):
 
         except FileNotFoundError:
             # Train the model
-            for mat, char in zip(trainX, trainY):
-                if char not in self.model:
-                    self.model[char] = 0
+            for mat, label in zip(trainX, trainY):
+                if label not in self.model:
+                    self.model[label] = 0
 
                 # Accumulate the mean of entries of the matrix
-                self.model[char] += mat.mean() / len(trainX)
+                self.model[label] += mat.mean() / len(trainX)
 
             # Save the model
             with open(self.model_file, "wb") as f:
                 pickle.dump(self.model, f)
 
     def predict(self, mat) -> str:
-        closest_char = ""
+        closest_label = ""
         closest_dist = np.inf
 
-        for char, char_mean in self.model.items():
+        for label, label_mean in self.model.items():
             # Minimize the absolute difference in mean values
-            dist = abs(mat.mean() - char_mean)
+            dist = abs(mat.mean() - label_mean)
 
             if dist < closest_dist:
                 closest_dist = dist
-                closest_char = char
+                closest_label = label
 
-        return closest_char
+        return closest_label
