@@ -3,7 +3,6 @@ import pickle
 
 from models.base_model import BaseModel
 
-
 class MeanValue(BaseModel):
     def __init__(self):
         super().__init__("mean_value.model")
@@ -20,6 +19,7 @@ class MeanValue(BaseModel):
                 if char not in self.model:
                     self.model[char] = 0
 
+                # Accumulate the mean of entries of the matrix
                 self.model[char] += mat.mean() / len(trainX)
 
             # Save the model
@@ -31,6 +31,7 @@ class MeanValue(BaseModel):
         closest_dist = np.inf
 
         for char, char_mean in self.model.items():
+            # Minimize the absolute difference in mean values
             dist = abs(mat.mean() - char_mean)
 
             if dist < closest_dist:

@@ -3,7 +3,6 @@ import pickle
 
 from models.base_model import BaseModel
 
-
 class MeanMatrix(BaseModel):
     def __init__(self):
         super().__init__("mean_matrix.model")
@@ -20,6 +19,7 @@ class MeanMatrix(BaseModel):
                 if char not in self.model:
                     self.model[char] = np.zeros(mat.shape)
 
+                # Accumulate the mean of matrices
                 self.model[char] += mat / len(trainX)
 
             # Save the model
@@ -31,6 +31,7 @@ class MeanMatrix(BaseModel):
         closest_dist = np.inf
 
         for char, char_mean in self.model.items():
+            # Minimize the Frobenius norm of the difference in matrices
             dist = np.linalg.norm(mat - char_mean)
 
             if dist < closest_dist:
