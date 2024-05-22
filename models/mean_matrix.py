@@ -4,9 +4,9 @@ import pickle
 from models.base_model import BaseModel
 
 
-class MeanValue(BaseModel):
+class MeanMatrix(BaseModel):
     def __init__(self):
-        super().__init__("mean_value.model")
+        super().__init__("mean_matrix.model")
 
     def train(self, trainX, trainY) -> None:
         try:
@@ -18,12 +18,12 @@ class MeanValue(BaseModel):
             # Train the model
             for mat, char in zip(trainX, trainY):
                 if char not in self.model:
-                    self.model[char] = 0
+                    self.model[char] = np.zeros(mat.shape)
 
-                self.model[char] += mat.mean() / len(trainX)
+                self.model[char] += mat / len(trainX)
 
             # Save the model
-            with open(self.model_file, "w") as f:
+            with open(self.model_file, "wb") as f:
                 pickle.dump(self.model, f)
 
     def predict(self, mat) -> str:
@@ -31,7 +31,7 @@ class MeanValue(BaseModel):
         closest_dist = np.inf
 
         for char, char_mean in self.model.items():
-            dist = abs(mat.mean() - char_mean)
+            dist = np.linalg.norm(mat - char_mean)
 
             if dist < closest_dist:
                 closest_dist = dist

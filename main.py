@@ -24,4 +24,6 @@ correct, total = model.test(testX, testY)
 
 # Display results
 print(f"{correct}/{total} correctly classified")
-print(f"{correct/total*100}% accurate")
+percent = round(correct/total*100, 2) # hide floating point errors
+print(f"{percent}% accurate")
+
