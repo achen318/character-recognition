@@ -3,6 +3,7 @@ import pickle
 
 from models.base_model import BaseModel
 
+
 class MeanValue(BaseModel):
     def __init__(self):
         super().__init__("mean_value.model")

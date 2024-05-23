@@ -4,9 +4,10 @@ import pickle
 from models.base_model import BaseModel
 
 
-class MeanMatrix(BaseModel):
-    def __init__(self):
-        super().__init__("mean_matrix.model")
+class SVD(BaseModel):
+    def __init__(self, k: int):
+        super().__init__("svd.model")
+        self.k = k
 
     def train(self, trainX, trainY) -> None:
         try:
@@ -22,6 +23,11 @@ class MeanMatrix(BaseModel):
 
                 # Accumulate the mean of matrices
                 self.model[label] += mat / len(trainX)
+
+            # Compute rank k approximation of matrices with SVD
+            for label, mat in self.model.items()
+                U, S, V = np.linalg.svd(mat)
+                self.model[label] = mat
 
             # Save the model
             with open(self.model_file, "wb") as f:
