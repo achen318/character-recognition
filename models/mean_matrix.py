@@ -1,3 +1,4 @@
+import matplotlib.pyplot as plt
 import numpy as np
 import pickle
 
@@ -26,6 +27,16 @@ class MeanMatrix(BaseModel):
             # Save the model
             with open(self.model_file, "wb") as f:
                 pickle.dump(self.model, f)
+
+    def display(self) -> None:
+        keys = sorted(self.model.keys())
+
+        for i, label in enumerate(keys):
+            plt.subplot(2, 5, i + 1)  # 2 rows, 5 columns
+            plt.imshow(self.model[label], cmap="gray")
+            plt.title(label)
+
+        plt.show()
 
     def predict(self, mat) -> str:
         closest_label = ""
