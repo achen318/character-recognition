@@ -18,13 +18,22 @@ class LeastSquares(BaseModel):
         except FileNotFoundError:
             # Train the model
             for mat, label in zip(trainX, trainY):
-                if label not in self.model:
-                    self.model[label] = np.zeros((784, 1))
-
                 # Add image as a column vector to the model
-                self.model[label] = np.hstack(
-                    (self.model[label], mat.reshape((784, 1)))
-                )
+                if label not in self.model:
+                    self.model[label] = mat.reshape((784, 1))
+                else:
+                    self.model[label] = np.hstack(
+                        (self.model[label], mat.reshape((784, 1)))
+                    )
+
+            for label, label_span in self.model.items():
+                # Compute independent basis matrix by RREF
+                label_span, _ = np.linalg.qr(label_span)
+
+                # Compute the least squares solution
+                self.model[label] = np.linalg.lstsq(
+                    label_span, np.zeros((784, 1)), rcond=None
+                )[0]
 
             # Save the model
             with open(self.model_file, "wb") as f:

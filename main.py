@@ -1,6 +1,6 @@
 from tensorflow.keras.datasets import mnist
 
-from models.least_squares import LeastSquares
+from models.least_squares import LeastSquares  # inconclusive
 from models.mean_matrix import MeanMatrix  # 69.68% accurate
 from models.mean_value import MeanValue  # 9.8% accurate
 from models.svd import SVD
