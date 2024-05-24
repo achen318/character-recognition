@@ -34,6 +34,7 @@ class MeanMatrix(BaseModel):
         for i, label in enumerate(keys):
             plt.subplot(2, 5, i + 1)  # 2 rows, 5 columns
             plt.imshow(self.model[label], cmap="gray")
+            plt.axis("off")
             plt.title(label)
 
         plt.show()
