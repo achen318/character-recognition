@@ -1,11 +1,12 @@
 from tensorflow.keras.datasets import mnist
 
+from models.least_squares import LeastSquares
 from models.mean_matrix import MeanMatrix  # 69.68% accurate
 from models.mean_value import MeanValue  # 9.8% accurate
 from models.svd import SVD
 
 # Initialize the mdoel
-model = MeanMatrix()
+model = LeastSquares()
 
 # Load the dataset
 (trainX, trainY), (testX, testY) = mnist.load_data()
