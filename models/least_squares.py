@@ -26,15 +26,6 @@ class LeastSquares(BaseModel):
                         (self.model[label], mat.reshape((784, 1)))
                     )
 
-            for label, label_span in self.model.items():
-                # Compute independent basis matrix by RREF
-                label_span, _ = np.linalg.qr(label_span)
-
-                # Compute the least squares solution
-                self.model[label] = np.linalg.lstsq(
-                    label_span, np.zeros((784, 1)), rcond=None
-                )[0]
-
             # Save the model
             with open(self.model_file, "wb") as f:
                 pickle.dump(self.model, f)
@@ -57,8 +48,15 @@ class LeastSquares(BaseModel):
         flat_mat = mat.reshape((784, 1))
 
         for label, label_span in self.model.items():
-            # Minimize the Frobenius norm of the difference in matrices
-            dist = np.linalg.norm(flat_mat - label_span)
+            # Use the first 784 columns to ensure the matrix is 784x784
+            label_span = label_span[:, :784]
+
+            # Use least squares to predict the label
+            m, c, _, _ = np.linalg.lstsq(label_span, flat_mat, rcond=None)
+            p_label = m * flat_mat + c
+
+            # Minimize the norm between p_label and flat_mat
+            dist = np.linalg.norm(p_label - flat_mat)
 
             if dist < closest_dist:
                 closest_dist = dist
