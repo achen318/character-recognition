@@ -17,9 +17,6 @@
       content="A website demonstration of how linear algebra techniques (e.g. singular value decomposition) can be used to classify handwritten characters. An accompanying slideshow explains the mathematical intuition of the machine learning models developed for the project. The website is interactive, allowing users to draw a character and see the predictions of different models.
     "
     />
-
-    <!--TODO: Script Link-->
-    <script src=""></script>
   </head>
   <body>
     <canvas
@@ -28,5 +25,44 @@
       height="280"
       style="border: 1px solid black"
     ></canvas>
+
+    <div>
+      <button id="clear">Clear</button>
+      <button id="predict">Predict</button>
+    </div>
+
+    <script>
+      const canvas = document.getElementById('draw');
+      const ctx = canvas.getContext('2d');
+
+      ctx.lineWidth = 10;
+      ctx.lineCap = 'round';
+
+      let penDown = false;
+
+      canvas.onmousedown = (e) => {
+        penDown = true;
+        ctx.beginPath();
+      };
+
+      canvas.onmousemove = (e) => {
+        if (penDown) {
+          ctx.lineTo(e.offsetX, e.offsetY);
+          ctx.stroke();
+        }
+      };
+
+      canvas.onmouseup = () => {
+        penDown = false;
+      };
+
+      canvas.onmouseleave = () => {
+        penDown = false;
+      };
+
+      document.getElementById('clear').onclick = () => {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+      };
+    </script>
   </body>
 </html>
