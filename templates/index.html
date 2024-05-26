@@ -24,32 +24,58 @@
     />
   </head>
   <body>
-    <div class="container-fluid">
-      <h1 class="text-center">Character Recognition</h1>
-      <canvas
-        id="draw"
-        width="280"
-        height="280"
-        style="border: 1px solid black"
-      ></canvas>
+    <div class="container p-5">
+      <header>
+        <h1>Character Recognition</h1>
+        <p>
+          This website demonstrates how linear algebra techniques (e.g. singular
+          value decomposition) can be used to classify handwritten characters.
+          An accompanying slideshow explains the mathematical intuition of the
+          machine learning models developed for the project. The website is
+          interactive, allowing users to draw a character and see the
+          predictions of different models.
+        </p>
+      </header>
 
-      <button id="predict" class="btn btn-outline-primary">Predict</button>
-      <button id="clear" class="btn btn-outline-danger">Clear</button>
+      <div class="row gap-4">
+        <div class="col-lg d-flex flex-column align-items-center">
+          <canvas
+            id="draw"
+            width="280"
+            height="280"
+            class="border border-dark mb-3"
+            >Your browser does not support canvas element.</canvas
+          >
 
-      <label>
-        <input type="radio" name="model" value="least-squares" />
-        Least Squares
-      </label>
+          <div>
+            <button id="predict" class="btn btn-outline-primary">
+              Predict
+            </button>
+            <button id="clear" class="btn btn-outline-danger">Clear</button>
+          </div>
+        </div>
 
-      <label>
-        <input type="radio" name="model" value="mean-matrix" />
-        Mean Matrix
-      </label>
-
-      <label>
-        <input type="radio" name="model" value="mean-value" />
-        Mean Value
-      </label>
+        <div class="col-lg">
+          <table class="table table-bordered">
+            <thead>
+              <tr>
+                <th>Model</th>
+                <th>Prediction</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Mean Matrix</td>
+                <td id="mm-pred">5</td>
+              </tr>
+              <tr>
+                <td>Mean Value</td>
+                <td id="mv-pred">3</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
 
       <div id="hidden" class="d-none"></div>
     </div>
@@ -68,6 +94,17 @@
         ctx.beginPath();
       };
 
+      canvas.addEventListener(
+        'touchstart',
+        (e) => {
+          e.preventDefault();
+
+          penDown = true;
+          ctx.beginPath();
+        },
+        { passive: false }
+      );
+
       canvas.onmousemove = (e) => {
         if (penDown) {
           ctx.lineTo(e.offsetX, e.offsetY);
@@ -75,13 +112,32 @@
         }
       };
 
-      canvas.onmouseup = () => {
-        penDown = false;
-      };
+      canvas.addEventListener(
+        'touchmove',
+        (e) => {
+          e.preventDefault();
 
-      canvas.onmouseleave = () => {
-        penDown = false;
-      };
+          if (penDown) {
+            const touch = e.touches[0];
+            const rect = canvas.getBoundingClientRect();
+
+            ctx.lineTo(
+              touch.pageX - rect.left - window.scrollX,
+              touch.pageY - rect.top - window.scrollY
+            );
+            ctx.stroke();
+          }
+        },
+        { passive: false }
+      );
+
+      canvas.onmouseup =
+        canvas.onmouseleave =
+        canvas.ontouchend =
+        canvas.ontouchcancel =
+          () => {
+            penDown = false;
+          };
 
       document.getElementById('clear').onclick = () => {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
