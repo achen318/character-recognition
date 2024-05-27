@@ -80,6 +80,11 @@
                 <td>{{ mv_acc }}%</td>
                 <td id="mv-pred"></td>
               </tr>
+              <tr>
+                <td>Neural Network</td>
+                <td>{{ nn_acc }}%</td>
+                <td id="nn-pred"></td>
+              </tr>
             </tbody>
           </table>
         </div>
@@ -171,6 +176,7 @@
             document.getElementById('ls-pred').textContent = data['ls'];
             document.getElementById('mm-pred').textContent = data['mm'];
             document.getElementById('mv-pred').textContent = data['mv'];
+            document.getElementById('nn-pred').textContent = data['nn'];
           });
 
         ctx.fillRect(0, 0, canvas.width, canvas.height);

@@ -8,6 +8,7 @@ from tensorflow.keras.datasets import mnist
 from models.least_squares import LeastSquares  # 24.33% accurate
 from models.mean_matrix import MeanMatrix  # 69.68% accurate
 from models.mean_value import MeanValue  # 9.8% accurate
+from models.neural_network import NeuralNetwork  # 97.32% accurate
 
 # Initialize the Flask app
 app = Flask(__name__)
@@ -16,6 +17,7 @@ app = Flask(__name__)
 ls = LeastSquares()
 mm = MeanMatrix()
 mv = MeanValue()
+nn = NeuralNetwork()
 
 # Load the dataset
 (trainX, trainY), (testX, testY) = mnist.load_data()
@@ -32,17 +34,21 @@ testY_str = testY.astype(str)
 ls.train(trainX, trainY)
 mm.train(trainX, trainY_str)
 mv.train(trainX, trainY_str)
+nn.train(trainX, trainY)
 
 # Test the models
-ls_acc = 100 * ls.test(testX, testY)
-mm_acc = 100 * mm.test(testX, testY_str)
-mv_acc = 100 * mv.test(testX, testY_str)
+ls_acc = round(100 * ls.test(testX, testY), 4)
+mm_acc = round(100 * mm.test(testX, testY_str), 4)
+mv_acc = round(100 * mv.test(testX, testY_str), 4)
+nn_acc = round(100 * nn.test(testX, testY), 4)
 
 
 # Render webpage
 @app.route("/")
 def index():
-    return render_template("index.html", ls_acc=ls_acc, mm_acc=mm_acc, mv_acc=mv_acc)
+    return render_template(
+        "index.html", ls_acc=ls_acc, mm_acc=mm_acc, mv_acc=mv_acc, nn_acc=nn_acc
+    )
 
 
 # Image via POST request -> prediction response
@@ -56,7 +62,12 @@ def predict():
     img = img.astype("float32") / 255.0  # normalize the image
 
     # Return the predictions
-    return {"ls": ls.predict(img), "mm": mm.predict(img), "mv": mv.predict(img)}
+    return {
+        "ls": ls.predict(img),
+        "mm": mm.predict(img),
+        "mv": mv.predict(img),
+        "nn": nn.predict(img),
+    }
 
 
 # Run the Flask app
