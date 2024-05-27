@@ -1,12 +1,13 @@
+import pickle
+
 import matplotlib.pyplot as plt
 import numpy as np
-import pickle
 
 from models.base_model import BaseModel
 
 
 class SVD(BaseModel):
-    def __init__(self, k: int):
+    def __init__(self, k):
         super().__init__(f"svd_{k}.model")
         self.k = k
 
@@ -17,44 +18,23 @@ class SVD(BaseModel):
                 self.model = pickle.load(f)
 
         except FileNotFoundError:
-            # Train the model
-            for mat, label in zip(trainX, trainY):
-                if label not in self.model:
-                    self.model[label] = np.zeros(mat.shape)
+            mean_matrix = np.mean(trainX, axis=0)
+            X = trainX - mean_matrix
 
-                # Accumulate the mean of matrices
-                self.model[label] += mat / len(trainX)
+            U, S, V = np.linalg.svd(X)
 
             # Save the model
             with open(self.model_file, "wb") as f:
                 pickle.dump(self.model, f)
 
     def display(self) -> None:
-        keys = sorted(self.model.keys())
-
-        for i, label in enumerate(keys):
-            plt.subplot(2, 5, i + 1)  # 2 rows, 5 columns
-            plt.imshow(self.model[label], cmap="gray")
-            plt.axis("off")
-            plt.title(label)
-
+        # Show the coefficients/weights matrix
+        plt.imshow(self.model.reshape(28, 28), cmap="gray")
+        plt.axis("off")
         plt.show()
 
     def predict(self, mat) -> str:
-        closest_label = ""
-        closest_dist = np.inf
+        X = mat.reshape(1, -1)
+        Y = X @ self.model  # returns a decimal
 
-        for label, label_mean in self.model.items():
-            # Perform SVD on the difference in matrices
-            U, S, V = np.linalg.svd(mat - label_mean)
-
-            # Minimize the Frobenius norm of the rank k approximation
-            dist = np.linalg.norm(
-                U[:, : self.k] @ np.diag(S[: self.k]) @ V[: self.k, :]
-            )
-
-            if dist < closest_dist:
-                closest_dist = dist
-                closest_label = label
-
-        return closest_label
+        return round(Y[0])

@@ -1,6 +1,7 @@
+import pickle
+
 import matplotlib.pyplot as plt
 import numpy as np
-import pickle
 
 from models.base_model import BaseModel
 

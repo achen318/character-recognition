@@ -1,6 +1,3 @@
-from typing import Tuple
-
-
 class BaseModel:
     def __init__(self, model_file):
         self.model = {}

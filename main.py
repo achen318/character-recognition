@@ -3,10 +3,11 @@ from tensorflow.keras.datasets import mnist
 from models.least_squares import LeastSquares  # 24.33% accurate
 from models.mean_matrix import MeanMatrix  # 69.68% accurate
 from models.mean_value import MeanValue  # 9.8% accurate
+from models.neural_network import NeuralNetwork
 from models.svd import SVD
 
 # Initialize the model
-model = LeastSquares()
+model = NeuralNetwork(layers=[784, 128, 10], iterations=1000)
 
 # Load the dataset
 (trainX, trainY), (testX, testY) = mnist.load_data()

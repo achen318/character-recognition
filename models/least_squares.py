@@ -1,6 +1,7 @@
+import pickle
+
 import matplotlib.pyplot as plt
 import numpy as np
-import pickle
 
 from models.base_model import BaseModel
 
@@ -29,7 +30,7 @@ class LeastSquares(BaseModel):
 
     def display(self) -> None:
         # Show the coefficients/weights matrix
-        plt.imshow(self.model.reshape(28, 28), cmap="gray")
+        plt.imshow(self.model.reshape(28, 28), cmap="RdYlGn")
         plt.axis("off")
         plt.show()
 
