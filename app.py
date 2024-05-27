@@ -5,8 +5,9 @@ from flask import Flask, render_template, request
 import numpy as np
 from tensorflow.keras.datasets import mnist
 
-from models.mean_matrix import MeanMatrix
-from models.mean_value import MeanValue
+from models.least_squares import LeastSquares  # inconclusive
+from models.mean_matrix import MeanMatrix  # 69.68% accurate
+from models.mean_value import MeanValue  # 9.8% accurate
 
 # Initialize the Flask app
 app = Flask(__name__)
@@ -30,11 +31,15 @@ testY = testY.astype(str)
 mm.train(trainX, trainY)
 mv.train(trainX, trainY)
 
+# Test the models
+mm_acc = mm.test(testX, testY)
+mv_acc = mv.test(testX, testY)
+
 
 # Render webpage
 @app.route("/")
 def index():
-    return render_template("index.html")
+    return render_template("index.html", mm_acc=mm_acc, mv_acc=mv_acc)
 
 
 # Image via POST request -> prediction response
@@ -47,6 +52,7 @@ def predict():
     img = np.invert(img)  # invert the image
     img = img.astype("float32") / 255.0  # normalize the image
 
+    # Return the predictions
     return {"mm": mm.predict(img), "mv": mv.predict(img)}
 
 

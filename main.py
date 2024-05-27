@@ -5,7 +5,7 @@ from models.mean_matrix import MeanMatrix  # 69.68% accurate
 from models.mean_value import MeanValue  # 9.8% accurate
 from models.svd import SVD
 
-# Initialize the mdoel
+# Initialize the model
 model = LeastSquares()
 
 # Load the dataset

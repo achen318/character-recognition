@@ -12,7 +12,7 @@ class BaseModel:
 
     def predict(self, mat) -> str: ...
 
-    def test(self, testX, testY) -> Tuple[int, int]:
+    def test(self, testX, testY) -> float:
         correct = 0
         total = 0
 
@@ -22,4 +22,4 @@ class BaseModel:
 
             total += 1
 
-        return (correct, total)
+        return correct / total
