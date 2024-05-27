@@ -16,50 +16,25 @@ class LeastSquares(BaseModel):
                 self.model = pickle.load(f)
 
         except FileNotFoundError:
-            # Train the model
-            for mat, label in zip(trainX, trainY):
-                # Add image as a column vector to the model
-                if label not in self.model:
-                    self.model[label] = mat.reshape((784, 1))
-                else:
-                    self.model[label] = np.hstack(
-                        (self.model[label], mat.reshape((784, 1)))
-                    )
+            # Perform linear regression with pseudo-inverse
+            X = trainX.reshape(trainX.shape[0], -1)
+            Y = trainY
+
+            B = np.linalg.pinv(X.T @ X) @ X.T @ Y
+            self.model = B
 
             # Save the model
             with open(self.model_file, "wb") as f:
                 pickle.dump(self.model, f)
 
     def display(self) -> None:
-        keys = sorted(self.model.keys())
-
-        for i, label in enumerate(keys):
-            plt.subplot(2, 5, i + 1)  # 2 rows, 5 columns
-            plt.imshow(self.model[label], cmap="gray")
-            plt.axis("off")
-            plt.title(label)
-
+        # Show the coefficients/weights matrix
+        plt.imshow(self.model.reshape(28, 28), cmap="gray")
+        plt.axis("off")
         plt.show()
 
     def predict(self, mat) -> str:
-        closest_label = ""
-        closest_dist = np.inf
+        X = mat.reshape(1, -1)
+        Y = X @ self.model  # returns a decimal
 
-        flat_mat = mat.reshape((784, 1))
-
-        for label, label_span in self.model.items():
-            # Use the first 784 columns to ensure the matrix is 784x784
-            label_span = label_span[:, :784]
-
-            # Use least squares to predict the label
-            m, c, _, _ = np.linalg.lstsq(label_span, flat_mat, rcond=None)
-            p_label = m * flat_mat + c
-
-            # Minimize the norm between p_label and flat_mat
-            dist = np.linalg.norm(p_label - flat_mat)
-
-            if dist < closest_dist:
-                closest_dist = dist
-                closest_label = label
-
-        return closest_label
+        return round(Y[0])

@@ -1,6 +1,6 @@
 from tensorflow.keras.datasets import mnist
 
-from models.least_squares import LeastSquares  # inconclusive
+from models.least_squares import LeastSquares  # 24.33% accurate
 from models.mean_matrix import MeanMatrix  # 69.68% accurate
 from models.mean_value import MeanValue  # 9.8% accurate
 from models.svd import SVD
@@ -15,20 +15,16 @@ model = LeastSquares()
 trainX = trainX.astype("float32") / 255.0
 testX = testX.astype("float32") / 255.0
 
-# Convert labels to strings
-trainY = trainY.astype(str)
-testY = testY.astype(str)
+# # Convert labels to strings
+# trainY = trainY.astype(str)
+# testY = testY.astype(str)
 
 # Train the model
 model.train(trainX, trainY)
 
 # Test the model
-correct, total = model.test(testX, testY)
+acc = model.test(testX, testY)
 
-# Display results
-print(f"{correct}/{total} correctly predicted")
-acc = round(correct / total * 100, 2)  # hide floating point errors
-print(f"{acc}% accurate")
-
-# Display the model
+# Display results and the model
+print(f"{100 * acc}% accurate")
 model.display()

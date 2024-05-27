@@ -5,7 +5,7 @@ from flask import Flask, render_template, request
 import numpy as np
 from tensorflow.keras.datasets import mnist
 
-from models.least_squares import LeastSquares  # inconclusive
+from models.least_squares import LeastSquares  # 24.33% accurate
 from models.mean_matrix import MeanMatrix  # 69.68% accurate
 from models.mean_value import MeanValue  # 9.8% accurate
 
@@ -13,6 +13,7 @@ from models.mean_value import MeanValue  # 9.8% accurate
 app = Flask(__name__)
 
 # Initialize the models
+ls = LeastSquares()
 mm = MeanMatrix()
 mv = MeanValue()
 
@@ -24,22 +25,24 @@ trainX = trainX.astype("float32") / 255.0
 testX = testX.astype("float32") / 255.0
 
 # Convert labels to strings
-trainY = trainY.astype(str)
-testY = testY.astype(str)
+trainY_str = trainY.astype(str)
+testY_str = testY.astype(str)
 
 # Train the models
-mm.train(trainX, trainY)
-mv.train(trainX, trainY)
+ls.train(trainX, trainY)
+mm.train(trainX, trainY_str)
+mv.train(trainX, trainY_str)
 
 # Test the models
-mm_acc = mm.test(testX, testY)
-mv_acc = mv.test(testX, testY)
+ls_acc = 100 * ls.test(testX, testY)
+mm_acc = 100 * mm.test(testX, testY_str)
+mv_acc = 100 * mv.test(testX, testY_str)
 
 
 # Render webpage
 @app.route("/")
 def index():
-    return render_template("index.html", mm_acc=mm_acc, mv_acc=mv_acc)
+    return render_template("index.html", ls_acc=ls_acc, mm_acc=mm_acc, mv_acc=mv_acc)
 
 
 # Image via POST request -> prediction response
@@ -53,7 +56,7 @@ def predict():
     img = img.astype("float32") / 255.0  # normalize the image
 
     # Return the predictions
-    return {"mm": mm.predict(img), "mv": mv.predict(img)}
+    return {"ls": ls.predict(img), "mm": mm.predict(img), "mv": mv.predict(img)}
 
 
 # Run the Flask app
