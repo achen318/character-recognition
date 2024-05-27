@@ -34,10 +34,6 @@ class NeuralNetwork(BaseModel):
             # Save the model
             self.model.save(self.model_file)
 
-    def display(self) -> None:
-        plt.axis("off")
-        plt.show()
-
     def predict(self, mat) -> str:
         pred = self.model.predict(mat.reshape(1, 28, 28))
         return str(np.argmax(pred))

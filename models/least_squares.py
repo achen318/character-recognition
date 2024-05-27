@@ -37,5 +37,5 @@ class LeastSquares(BaseModel):
     def predict(self, mat) -> str:
         X = mat.reshape(1, -1)
         Y = X @ self.model  # returns a decimal
-
+        Y = np.clip(Y, 0, 9)  # clip to [0, 9]
         return round(Y[0])
