@@ -66,9 +66,9 @@
             </thead>
             <tbody>
               <tr>
-                <td>Least Squares</td>
-                <td>{{ ls_acc }}%</td>
-                <td id="ls-pred"></td>
+                <td>Neural Network</td>
+                <td>{{ nn_acc }}%</td>
+                <td id="nn-pred"></td>
               </tr>
               <tr>
                 <td>Mean Matrix</td>
@@ -76,14 +76,19 @@
                 <td id="mm-pred"></td>
               </tr>
               <tr>
+                <td>Least Squares</td>
+                <td>{{ ls_acc }}%</td>
+                <td id="ls-pred"></td>
+              </tr>
+              <tr>
+                <td>Bogus</td>
+                <td>{{ bg_acc }}%</td>
+                <td id="bg-pred"></td>
+              </tr>
+              <tr>
                 <td>Mean Value</td>
                 <td>{{ mv_acc }}%</td>
                 <td id="mv-pred"></td>
-              </tr>
-              <tr>
-                <td>Neural Network</td>
-                <td>{{ nn_acc }}%</td>
-                <td id="nn-pred"></td>
               </tr>
             </tbody>
           </table>
@@ -173,6 +178,7 @@
         })
           .then((res) => res.json())
           .then((data) => {
+            document.getElementById('bg-pred').textContent = data['bg'];
             document.getElementById('ls-pred').textContent = data['ls'];
             document.getElementById('mm-pred').textContent = data['mm'];
             document.getElementById('mv-pred').textContent = data['mv'];
