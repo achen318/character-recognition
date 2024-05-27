@@ -66,34 +66,39 @@
             <tbody>
               <tr>
                 <td>Mean Matrix</td>
-                <td id="mm-pred">5</td>
+                <td id="mm-pred"></td>
               </tr>
               <tr>
                 <td>Mean Value</td>
-                <td id="mv-pred">3</td>
+                <td id="mv-pred"></td>
               </tr>
             </tbody>
           </table>
         </div>
       </div>
-
-      <div id="hidden" class="d-none"></div>
     </div>
 
     <script>
       const canvas = document.getElementById('draw');
       const ctx = canvas.getContext('2d');
 
+      // Add a white background
+      ctx.fillStyle = 'white';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      // Round pen strokes of size 10
       ctx.lineWidth = 10;
       ctx.lineCap = 'round';
 
       let penDown = false;
 
+      // Start drawing (mouse)
       canvas.onmousedown = (e) => {
         penDown = true;
         ctx.beginPath();
       };
 
+      // Start drawing (touch)
       canvas.addEventListener(
         'touchstart',
         (e) => {
@@ -105,6 +110,7 @@
         { passive: false }
       );
 
+      // Draw (mouse)
       canvas.onmousemove = (e) => {
         if (penDown) {
           ctx.lineTo(e.offsetX, e.offsetY);
@@ -112,6 +118,7 @@
         }
       };
 
+      // Draw (touch)
       canvas.addEventListener(
         'touchmove',
         (e) => {
@@ -131,6 +138,7 @@
         { passive: false }
       );
 
+      // Stop drawing (mouse, touch)
       canvas.onmouseup =
         canvas.onmouseleave =
         canvas.ontouchend =
@@ -139,16 +147,24 @@
             penDown = false;
           };
 
+      // Reset canvas to white
       document.getElementById('clear').onclick = () => {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
       };
 
+      // POST request, get predictions, reset canvas
       document.getElementById('predict').onclick = () => {
-        const img = new Image(28, 28);
-        img.src = canvas.toDataURL();
-        document.getElementById('hidden').replaceChildren(img);
+        fetch('/predict', {
+          method: 'POST',
+          body: canvas.toDataURL().split(',')[1]
+        })
+          .then((res) => res.json())
+          .then((data) => {
+            document.getElementById('mm-pred').textContent = data['mm'];
+            document.getElementById('mv-pred').textContent = data['mv'];
+          });
 
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
       };
     </script>
   </body>
