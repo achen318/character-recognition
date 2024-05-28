@@ -9,7 +9,7 @@ from models.bogus import Bogus  # ~ 2.13% accurate
 from models.least_squares import LeastSquares  # 2.41% accurate
 from models.mean_matrix import MeanMatrix  # 27.86% accurate
 from models.mean_value import MeanValue  # 2.13% accurate
-from models.neural_network import NeuralNetwork  # 84.64% accurate
+from models.neural_network import NeuralNetwork  # ~ 84.64% accurate
 
 # Initialize the Flask app
 app = Flask(__name__)
