@@ -1,4 +1,3 @@
-import matplotlib.pyplot as plt
 import numpy as np
 from tensorflow.keras.layers import Conv2D, Dense, Flatten, MaxPooling2D
 from tensorflow.keras.models import Sequential, load_model

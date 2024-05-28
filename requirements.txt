@@ -1,6 +1,5 @@
 emnist
 Flask
-matplotlib
 numpy
 opencv-python
 tensorflow

@@ -1,7 +1,10 @@
 import base64
+import pickle
 
 import cv2
-from emnist import extract_training_samples, extract_test_samples
+from tensorflow.keras.models import load_model
+
+# from emnist import extract_training_samples, extract_test_samples
 from flask import Flask, render_template, request
 import numpy as np
 
@@ -21,27 +24,36 @@ mm = MeanMatrix()
 mv = MeanValue()
 nn = NeuralNetwork()
 
-# Load the dataset
-trainX, trainY = extract_training_samples("balanced")
-testX, testY = extract_test_samples("balanced")
+# # Load the dataset
+# trainX, trainY = extract_training_samples("balanced")
+# testX, testY = extract_test_samples("balanced")
 
-# Normalize pixel data to be float32 in [0, 1]
-trainX = trainX.astype("float32") / 255.0
-testX = testX.astype("float32") / 255.0
+# # Normalize pixel data to be float32 in [0, 1]
+# trainX = trainX.astype("float32") / 255.0
+# testX = testX.astype("float32") / 255.0
 
-# Train the models
-bg.train(trainX, trainY)
-ls.train(trainX, trainY)
-mm.train(trainX, trainY)
-mv.train(trainX, trainY)
-nn.train(trainX, trainY)
+# # Train the models
+# bg.train(trainX, trainY)
+# ls.train(trainX, trainY)
+# mm.train(trainX, trainY)
+# mv.train(trainX, trainY)
+# nn.train(trainX, trainY)
 
-# Test the models
-bg_acc = f"{(100 * bg.test(testX, testY)):.2f}"
-ls_acc = f"{(100 * ls.test(testX, testY)):.2f}"
-mm_acc = f"{(100 * mm.test(testX, testY)):.2f}"
-mv_acc = f"{(100 * mv.test(testX, testY)):.2f}"
-nn_acc = f"{(100 * nn.test(testX, testY)):.2f}"
+# # Test the models
+# bg_acc = f"{(100 * bg.test(testX, testY)):.2f}"
+# ls_acc = f"{(100 * ls.test(testX, testY)):.2f}"
+# mm_acc = f"{(100 * mm.test(testX, testY)):.2f}"
+# mv_acc = f"{(100 * mv.test(testX, testY)):.2f}"
+# nn_acc = f"{(100 * nn.test(testX, testY)):.2f}"
+
+# Load the models for Vercel
+for model in [ls, mm, mv]:
+    try:
+        with open(model.model_file, "rb") as f:
+            model.model = pickle.load(f)
+    except FileNotFoundError:
+        ...
+nn.model = load_model(nn.model_file)
 
 
 # Render webpage
@@ -49,11 +61,11 @@ nn_acc = f"{(100 * nn.test(testX, testY)):.2f}"
 def index():
     return render_template(
         "index.html",
-        bg_acc=bg_acc,
-        ls_acc=ls_acc,
-        mm_acc=mm_acc,
-        mv_acc=mv_acc,
-        nn_acc=nn_acc,
+        bg_acc="2.21",
+        ls_acc="2.41",
+        mm_acc="27.86",
+        mv_acc="2.13",
+        nn_acc="84.30",
     )
 
 
