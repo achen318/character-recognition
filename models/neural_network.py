@@ -7,7 +7,7 @@ from models.base_model import BaseModel
 
 class NeuralNetwork(BaseModel):
     def __init__(self):
-        super().__init__("neural_network.model")
+        super().__init__("neural_network.keras")
 
     def train(self, trainX, trainY) -> None:
         try:
