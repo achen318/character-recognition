@@ -28,12 +28,8 @@ class MeanValue(BaseModel):
             with open(self.model_file, "wb") as f:
                 pickle.dump(self.model, f)
 
-    def display(self) -> None:
-        for label in sorted(self.model.keys()):
-            print(f"{label}: {self.model[label]}")
-
-    def predict(self, mat) -> str:
-        closest_label = ""
+    def predict(self, mat) -> int:
+        closest_label = -1
         closest_dist = np.inf
 
         for label, label_mean in self.model.items():

@@ -1,6 +1,6 @@
 import matplotlib.pyplot as plt
 import numpy as np
-from tensorflow.keras.layers import Dense, Flatten
+from tensorflow.keras.layers import Conv2D, Dense, Flatten, MaxPooling2D
 from tensorflow.keras.models import Sequential, load_model
 
 from models.base_model import BaseModel
@@ -17,11 +17,15 @@ class NeuralNetwork(BaseModel):
 
         except OSError:
             # Create the model
-            self.model = Sequential()
-            self.model.add(Flatten(input_shape=(28, 28)))
-            self.model.add(Dense(128, activation="relu"))
-            self.model.add(Dense(128, activation="relu"))
-            self.model.add(Dense(10, activation="softmax"))
+            self.model = Sequential(
+                [
+                    Conv2D(32, 3, input_shape=(28, 28, 1)),
+                    MaxPooling2D(2, 2),
+                    Flatten(input_shape=(28, 28, 1)),
+                    Dense(128, activation="relu"),
+                    Dense(47, activation="softmax"),
+                ]
+            )
 
             # Compile and train the model
             self.model.compile(
@@ -29,14 +33,14 @@ class NeuralNetwork(BaseModel):
                 loss="sparse_categorical_crossentropy",
                 metrics=["accuracy"],
             )
-            self.model.fit(trainX, trainY, epochs=3)
+            self.model.fit(trainX, trainY, epochs=5)
 
             # Save the model
             self.model.save(self.model_file)
 
-    def predict(self, mat) -> str:
+    def predict(self, mat) -> int:
         pred = self.model.predict(mat.reshape(1, 28, 28))
-        return str(np.argmax(pred))
+        return int(np.argmax(pred))
 
     def test(self, testX, testY) -> float:
         return self.model.evaluate(testX, testY)[1]

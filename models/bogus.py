@@ -23,5 +23,5 @@ class Bogus(BaseModel):
             with open(self.model_file, "wb") as f:
                 pickle.dump(self.model, f)
 
-    def predict(self, mat) -> str:
+    def predict(self, mat) -> int:
         return np.random.choice(self.model)

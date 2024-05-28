@@ -29,19 +29,8 @@ class MeanMatrix(BaseModel):
             with open(self.model_file, "wb") as f:
                 pickle.dump(self.model, f)
 
-    def display(self) -> None:
-        keys = sorted(self.model.keys())
-
-        for i, label in enumerate(keys):
-            plt.subplot(2, 5, i + 1)  # 2 rows, 5 columns
-            plt.imshow(self.model[label], cmap="gray")
-            plt.axis("off")
-            plt.title(label)
-
-        plt.show()
-
-    def predict(self, mat) -> str:
-        closest_label = ""
+    def predict(self, mat) -> int:
+        closest_label = -1
         closest_dist = np.inf
 
         for label, label_mean in self.model.items():

@@ -28,14 +28,8 @@ class LeastSquares(BaseModel):
             with open(self.model_file, "wb") as f:
                 pickle.dump(self.model, f)
 
-    def display(self) -> None:
-        # Show the coefficients/weights matrix
-        plt.imshow(self.model.reshape(28, 28), cmap="RdYlGn")
-        plt.axis("off")
-        plt.show()
-
-    def predict(self, mat) -> str:
+    def predict(self, mat) -> int:
         X = mat.reshape(1, -1)
         Y = X @ self.model  # returns a decimal
-        Y = np.clip(Y, 0, 9)  # clip to [0, 9]
+        Y = np.clip(Y, 0, 46)  # clip to [0, 46]
         return round(Y[0])

@@ -1,3 +1,4 @@
+emnist
 Flask
 matplotlib
 numpy
