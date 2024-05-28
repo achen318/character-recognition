@@ -1,5 +1,5 @@
 import numpy as np
-from tensorflow.keras.layers import Conv2D, Dense, Flatten, MaxPooling2D
+from tensorflow.keras.layers import Conv2D, Dense, Flatten, InputLayer, MaxPooling2D
 from tensorflow.keras.models import Sequential, load_model
 
 from models.base_model import BaseModel
@@ -18,9 +18,10 @@ class NeuralNetwork(BaseModel):
             # Create the model
             self.model = Sequential(
                 [
-                    Conv2D(32, 3, input_shape=(28, 28, 1)),
+                    InputLayer(input_shape=(28, 28, 1)),
+                    Conv2D(32, 3),
                     MaxPooling2D(2, 2),
-                    Flatten(input_shape=(28, 28, 1)),
+                    Flatten(),
                     Dense(128, activation="relu"),
                     Dense(47, activation="softmax"),
                 ]
