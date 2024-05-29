@@ -4,12 +4,12 @@ A website demonstration of how linear algebra techniques (e.g. singular value de
 
 # Commands
 
-| Install                                                     | Run              | Clean                         |
-| ----------------------------------------------------------- | ---------------- | ----------------------------- |
-| `pip3 install -r requirements.txt`                          | `python3 app.py` | `rm *.model`                  |
-| `mkdir ~/.cache/emnist`                                     |                  | `rm -rf neural_network.model` |
-| `wget https://biometrics.nist.gov/cs_links/EMNIST/gzip.zip` |                  |                               |
-| `mv gzip.zip ~/.cache/emnist/emnist.zip`                    |                  |                               |
+| Install                                                     | Run              | Clean            |
+| ----------------------------------------------------------- | ---------------- | ---------------- |
+| `pip3 install -r requirements.txt`                          | `python3 app.py` | `rm -rf *.model` |
+| `mkdir ~/.cache/emnist`                                     |                  |                  |
+| `wget https://biometrics.nist.gov/cs_links/EMNIST/gzip.zip` |                  |                  |
+| `mv gzip.zip ~/.cache/emnist/emnist.zip`                    |                  |                  |
 
 # Credits
 
